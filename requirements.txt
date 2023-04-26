@@ -1,0 +1,6 @@
+# clip库安装
+# pip install ftfy regex tqdm
+# pip install git+https://github.com/openai/CLIP.git
+
+# pytortch库安装
+# https://pytorch.org/get-started/previous-versions/
