@@ -35,7 +35,7 @@ class predict:
         self.column = column
         self.image_feature = image_feature
 
-    def _predict(self, english_text=None, chinese_text=None):
+    def _predict(self, english_text=None, chinese_text=None):  # 输入单个/多个文本，返回图片名和概率值
         with torch.no_grad():
             # 英文
             english_colunm = None
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     # 开始预测
     predictor = predict(args)
     english_colunm, english_score, chinese_colunm, chinese_score = \
-        predictor._predict(english_text, chinese_text)  # 单个/多个文本
+        predictor._predict(english_text, chinese_text)  # 输入单个/多个文本，返回图片名和概率值
     print(f'| 英文:{english_text}:{english_colunm} |')
     print(f'| 得分:{english_text}:{english_score} |')
     print(f'| 中文:{chinese_text}:{chinese_colunm} |')
