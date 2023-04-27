@@ -16,29 +16,31 @@ args = parser.parse_args()
 
 class predict:
     def __init__(self, args):
+        self.device = args.device
+        self.model_name = args.model_name
+        self.database_path = args.database_path
+        self.english_score_threshold = args.english_score_threshold
+        self.chinese_score_threshold = args.chinese_score_threshold
         # 模型
-        model, image_deal = clip.load(args.model_name, device=args.device)  # clip模型：图片模型+英文文本模型
+        model, image_deal = clip.load(self.model_name, device=self.device)  # clip模型：图片模型+英文文本模型
         chinese_encode = transformers.BertForSequenceClassification.from_pretrained(
-            "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese").eval().half().to(args.device)  # 中文文本模型，只支持ViT-L/14(890M)
-        print(f'| 模型加载成功:{args.model_name} | 中文文本模型:IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese |')
+            "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese").eval().half().to(self.device)  # 中文文本模型，只支持ViT-L/14(890M)
+        print(f'| 模型加载成功:{self.model_name} | 中文文本模型:IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese |')
         self.model = model.eval()
         self.chinese_encode = chinese_encode
         # 数据
-        df = pd.read_csv(args.database_path)
+        df = pd.read_csv(self.database_path)
         column = df.columns
         image_feature = df.values
         self.column = column
         self.image_feature = image_feature
-        # 阈值
-        self.english_score_threshold = args.english_score_threshold
-        self.chinese_score_threshold = args.chinese_score_threshold
 
     def _predict(self, english_text=None, chinese_text=None):
         with torch.no_grad():
             # 英文
             english_colunm = None
             if english_text:
-                english_sequence = clip.tokenize(english_text).to(args.device)  # 处理
+                english_sequence = clip.tokenize(english_text).to(self.device)  # 处理
                 english_text_feature = self.model.encode_text(english_sequence)  # 推理
                 english_text_feature /= torch.norm(english_text_feature, dim=1, keepdim=True)  # 归一化
                 english_text_feature = english_text_feature.cpu().numpy()
@@ -50,7 +52,7 @@ class predict:
                     "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese")
                 chinese_sequence = chinese_tokenizer(chinese_text, max_length=77, padding='max_length',
                                                      truncation=True, return_tensors='pt')['input_ids'].type(
-                    torch.int32).to(args.device)  # 处理
+                    torch.int32).to(self.device)  # 处理
                 chinese_text_feature = self.chinese_encode(chinese_sequence).logits  # 推理
                 chinese_text_feature /= torch.norm(chinese_text_feature, dim=1, keepdim=True)  # 归一化
                 chinese_text_feature = chinese_text_feature.cpu().numpy()
