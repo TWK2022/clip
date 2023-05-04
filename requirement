@@ -1,8 +1,8 @@
+# pip install ... -i https://pypi.doubanio.com/simple
+
 # pytortch库安装
 # https://pytorch.org/get-started/previous-versions/
 
 # clip库安装
 # pip install ftfy regex tqdm -i https://pypi.doubanio.com/simple
 # pip install git+https://github.com/openai/CLIP.git
-
-# pip install pandas transformers -i https://pypi.doubanio.com/simple
