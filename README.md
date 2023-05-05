@@ -1,5 +1,5 @@
 ## 快速建立图片特征数据库并用文本描述进行搜索
->基于CLIP官方项目改编:https://github.com/openai/CLIP  
+>基于CLIP官方项目改编：https://github.com/openai/CLIP  
 >采用国内配套中文模型：https://huggingface.co/IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese  
 >首次运行代码时会自动下载模型文件到本地clip和huggingface文件夹中(共约1G)  
 ### CLIP介绍
@@ -16,6 +16,6 @@
 >在english_text、chinese_text中输入英文、中文文本，运行程序后可以搜到数据库中符合文本描述的图片  
 >args中english_score_threshold、chinese_score_threshold为匹配的得分筛选阈值，17、12为基准，可适当调整  
 ### 其他
->github链接:https://github.com/TWK2022/clip  
->学习笔记:https://github.com/TWK2022/notebook  
->邮箱:1024565378@qq.com  
+>github链接：https://github.com/TWK2022/clip  
+>学习笔记：https://github.com/TWK2022/notebook  
+>邮箱：1024565378@qq.com  
