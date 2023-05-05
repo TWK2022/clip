@@ -1,7 +1,7 @@
 ## 快速建立图片特征数据库并用文本描述进行搜索
 >基于CLIP官方项目改编:https://github.com/openai/CLIP  
 >采用国内配套中文模型：https://huggingface.co/IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese  
->首次运行代码时会自动下载模型文件到本地clip和huggingface文件夹中，大小在1G左右  
+>首次运行代码时会自动下载模型文件到本地clip和huggingface文件夹中(共约1G)  
 ### CLIP介绍
 >CLIP是2021年openai发布的基于对比学习的多模态模型(pytorch)，用于将文字描述和图片匹配  
 >相当于1个文本分类模型与1个图片分类模型相结合，两个模型的标签一致，只是标签并非独热编码而是一段特征向量  
