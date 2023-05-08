@@ -59,7 +59,7 @@ class predict:
                 chinese_colunm, chinese_score = self._deal(chinese_text_feature, self.chinese_score_threshold)
         return english_colunm, english_score, chinese_colunm, chinese_score
 
-    def _deal(self, text_feature, score_threshold):
+    def _deal(self, text_feature, score_threshold):  # 输入单个/多个文本，返回大于阈值的图片名和相似度
         score = np.dot(text_feature, self.image_feature)
         judge = np.where(score > score_threshold, True, False)
         colunm = [self.column[judge[_]].tolist() for _ in range(len(judge))]
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     # 开始预测
     predictor = predict(args)
     english_colunm, english_score, chinese_colunm, chinese_score = \
-        predictor._predict(english_text, chinese_text)  # 输入单个/多个文本，返回图片名和概率值
+        predictor._predict(english_text, chinese_text)  # 输入单个/多个文本，返回大于阈值的图片名和相似度
     print(f'| 英文{english_text}:{english_colunm} |')
     print(f'| 相似度:{english_score} |')
     print(f'| 中文{chinese_text}:{chinese_colunm} |')
