@@ -75,6 +75,7 @@ if __name__ == '__main__':
     predictor = predict(args)
     english_colunm, english_score, chinese_colunm, chinese_score = \
         predictor._predict(english_text, chinese_text)  # 输入单个/多个文本，返回大于阈值的图片名和相似度
+    print(f'| 英文阈值:{args.english_score_threshold}  中文阈值:{args.chinese_score_threshold} |')
     print(f'| 英文{english_text}:{english_colunm} |')
     print(f'| 相似度:{english_score} |')
     print(f'| 中文{chinese_text}:{chinese_colunm} |')
