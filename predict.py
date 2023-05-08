@@ -8,8 +8,8 @@ import pandas as pd
 parser = argparse.ArgumentParser(description='')
 parser.add_argument('--database_path', default='feature_database.csv', type=str, help='|特征数据库位置|')
 parser.add_argument('--model_name', default='ViT-L/14', type=str, help='|模型名称，中文文本模型只支持ViT-L/14(890M)|')
-parser.add_argument('--english_score_threshold', default=17, type=int, help='|英文文本得分筛选阈值，17为基准|')
-parser.add_argument('--chinese_score_threshold', default=12, type=int, help='|中文文本得分筛选阈值，12为基准|')
+parser.add_argument('--english_score_threshold', default=0.17, type=int, help='|英文文本相似度筛选阈值，0.17为基准|')
+parser.add_argument('--chinese_score_threshold', default=0.12, type=int, help='|中文文本相似度筛选阈值，0.12为基准|')
 parser.add_argument('--device', default='cuda', type=str, help='|运行设备|')
 args = parser.parse_args()
 
@@ -60,7 +60,7 @@ class predict:
         return english_colunm, english_score, chinese_colunm, chinese_score
 
     def _deal(self, text_feature, score_threshold):
-        score = 100.0 * np.dot(text_feature, self.image_feature)
+        score = np.dot(text_feature, self.image_feature)
         judge = np.where(score > score_threshold, True, False)
         colunm = [self.column[judge[_]].tolist() for _ in range(len(judge))]
         score = [score[_][judge[_]].tolist() for _ in range(len(judge))]
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     predictor = predict(args)
     english_colunm, english_score, chinese_colunm, chinese_score = \
         predictor._predict(english_text, chinese_text)  # 输入单个/多个文本，返回图片名和概率值
-    print(f'| 英文:{english_text}:{english_colunm} |')
-    print(f'| 得分:{english_text}:{english_score} |')
-    print(f'| 中文:{chinese_text}:{chinese_colunm} |')
-    print(f'| 得分:{chinese_text}:{chinese_score} |')
+    print(f'| 英文{english_text}:{english_colunm} |')
+    print(f'| 相似度:{english_score} |')
+    print(f'| 中文{chinese_text}:{chinese_colunm} |')
+    print(f'| 相似度:{chinese_score} |')
