@@ -2,7 +2,7 @@
 >基于CLIP官方项目改编：https://github.com/openai/CLIP  
 >采用国内配套中文模型：https://huggingface.co/IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese  
 >首次运行代码时会自动下载模型文件到本地clip(890M)和huggingface(1.4G)文件夹中(共约2.3G)  
->GPU运行时显存占用约2600M
+>GPU运行时显存占用约2500M  
 ### CLIP介绍
 >CLIP是2021年openai发布的基于对比学习的多模态模型(pytorch)，用于将文字描述和图片匹配  
 >由一个图片编码模型和一个文本编码模型组成，一张图片经过图片模型得到的特征向量和这张图片的描述经过文本模型得到的特征向量会相近  
