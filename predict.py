@@ -24,7 +24,8 @@ class predict:
         # 模型
         model, image_deal = clip.load(self.model_name, device=self.device)  # clip模型：图片模型+英文文本模型
         chinese_encode = transformers.BertForSequenceClassification.from_pretrained(
-            "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese").eval().half().to(self.device)  # 中文文本模型，只支持ViT-L/14(890M)
+            "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese",
+            cache_dir='/root/.cache/huggingface/hub').eval().half().to(self.device)  # 中文文本模型，只支持ViT-L/14(890M)
         print(f'| 模型加载成功:{self.model_name} | 中文文本模型:IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese |')
         self.model = model.eval()
         self.chinese_encode = chinese_encode
@@ -49,7 +50,7 @@ class predict:
             chinese_colunm = None
             if chinese_text:
                 chinese_tokenizer = transformers.BertTokenizer.from_pretrained(
-                    "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese")
+                    "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese", cache_dir='/root/.cache/huggingface/hub')
                 chinese_sequence = chinese_tokenizer(chinese_text, max_length=77, padding='max_length',
                                                      truncation=True, return_tensors='pt')['input_ids'].type(
                     torch.int32).to(self.device)  # 处理
