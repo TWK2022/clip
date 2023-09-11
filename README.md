@@ -1,5 +1,5 @@
 ## 快速建立图片特征数据库并用文本描述进行搜索
->基于CLIP官方项目改编：https://github.com/openai/CLIP  
+>基于CLIP官方项目整理：https://github.com/openai/CLIP  
 >采用国内配套中文模型：https://huggingface.co/IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese  
 >首次运行代码时会自动下载模型文件到本地clip(890M)和huggingface(1.4G)文件夹中(共约2.3G)  
 >GPU运行时显存占用约2500M  
@@ -16,6 +16,12 @@
 ### 2，predict.py
 >在english_text、chinese_text中输入英文、中文文本，运行程序后可以搜到数据库中符合文本描述的图片  
 >args中english_score_threshold、chinese_score_threshold为匹配的相似度筛选阈值，0.17、0.12为基准，可适当调整  
+### 3，flask_start.py
+>用flask将程序包装成一个服务，并在服务器上启动
+### 4，flask_request.py
+>以post请求传输数据调用服务
+### 5，gunicorn_config.py
+>用gunicorn多进程启动flask服务：gunicorn -c gunicorn_config.py flask_start:app
 ### 其他
 >github链接：https://github.com/TWK2022/clip  
 >学习笔记：https://github.com/TWK2022/notebook  
