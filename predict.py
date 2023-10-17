@@ -23,9 +23,9 @@ class clip_class:
         # 模型
         model, image_deal = clip.load(self.model_name, device=self.device)  # clip模型：图片模型+英文文本模型
         self.model = model.eval()
-        if args.use_chinese:
+        if self.use_chinese:
             chinese_tokenizer = transformers.BertTokenizer.from_pretrained(
-                "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese", cache_dir='/root/.cache/huggingface/hub')
+                "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese", cache_dir=args.chinese_cache)
             self.chinese_tokenizer = chinese_tokenizer
             chinese_encode = transformers.BertForSequenceClassification.from_pretrained(
                 "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese",
