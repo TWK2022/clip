@@ -7,7 +7,7 @@ import argparse
 import numpy as np
 import pandas as pd
 
-parser = argparse.ArgumentParser(description='')
+parser = argparse.ArgumentParser(description='|建立图片数据库|')
 parser.add_argument('--image_path', default='image_database', type=str, help='|图片文件夹位置|')
 parser.add_argument('--save_path', default='feature_database.csv', type=str, help='|特征数据库保存位置(.csv)|')
 parser.add_argument('--model_name', default='ViT-L/14', type=str, help='|模型名称，中文文本模型只支持ViT-L/14(890M)|')

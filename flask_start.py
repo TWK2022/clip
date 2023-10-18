@@ -8,7 +8,10 @@ from predict import clip_class
 # -------------------------------------------------------------------------------------------------------------------- #
 # 设置
 parser = argparse.ArgumentParser('|在服务器上启动flask服务|')
-# ...
+parser.add_argument('--database_path', default='feature_database.csv', type=str, help='|特征数据库位置|')
+parser.add_argument('--model_name', default='ViT-L/14', type=str, help='|模型名称，中文文本模型只支持ViT-L/14(890M)|')
+parser.add_argument('--chinese_cache', default='/root/.cache/huggingface/hub', type=str, help='|中文文本模型缓存/下载位置|')
+parser.add_argument('--device', default='cuda', type=str, help='|运行设备|')
 args, _ = parser.parse_known_args()  # 防止传入参数冲突，替代args = parser.parse_args()
 app = flask.Flask(__name__)  # 创建一个服务框架
 

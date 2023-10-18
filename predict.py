@@ -5,10 +5,10 @@ import numpy as np
 import transformers
 import pandas as pd
 
-parser = argparse.ArgumentParser(description='')
+parser = argparse.ArgumentParser(description='|clip文本搜图片|')
 parser.add_argument('--database_path', default='feature_database.csv', type=str, help='|特征数据库位置|')
 parser.add_argument('--model_name', default='ViT-L/14', type=str, help='|模型名称，中文文本模型只支持ViT-L/14(890M)|')
-parser.add_argument('--chinese_cache', default='/root/.cache/huggingface/hub', type=str, help='|中文文本模型缓存|')
+parser.add_argument('--chinese_cache', default='/root/.cache/huggingface/hub', type=str, help='|中文文本模型缓存/下载位置|')
 parser.add_argument('--device', default='cuda', type=str, help='|运行设备|')
 args = parser.parse_args()
 
@@ -22,11 +22,10 @@ class clip_class:
         model, image_deal = clip.load(self.model_name, device=self.device)  # clip模型：图片模型+英文文本模型
         self.model = model.eval()
         chinese_tokenizer = transformers.BertTokenizer.from_pretrained(
-            "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese", cache_dir=args.chinese_cache)
+            "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese")
         self.chinese_tokenizer = chinese_tokenizer
         chinese_encode = transformers.BertForSequenceClassification.from_pretrained(
-            "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese",
-            cache_dir=args.chinese_cache).eval().half().to(self.device)  # 中文文本模型，只支持ViT-L/14(890M)
+            "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese").eval().half().to(self.device)  # 中文文本模型，只支持ViT-L/14(890M)
         self.chinese_encode = chinese_encode
         # 数据
         df = pd.read_csv(self.database_path)
