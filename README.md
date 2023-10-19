@@ -27,9 +27,11 @@
 >运行database_prepare.py即可生成特征数据库feature_database.csv  
 ### 4，predict.py
 >在text中输入文本，运行程序后可以搜到数据库中符合文本描述的图片  
-### 5，flask_start.py
+### 5，gradio_start.py
+>用gradio将程序包装成一个可视化的界面，可以在网页可视化的展示
+### 6，flask_start.py
 >用flask将程序包装成一个服务，并在服务器上启动
-### 6，flask_request.py
+### 7，flask_request.py
 >以post请求传输数据调用服务
-### 7，gunicorn_config.py
+### 8，gunicorn_config.py
 >用gunicorn多进程启动flask服务：gunicorn -c gunicorn_config.py flask_start:app
