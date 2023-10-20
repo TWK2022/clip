@@ -1,3 +1,4 @@
+import os
 import clip
 import torch
 import argparse
@@ -5,6 +6,7 @@ import numpy as np
 import transformers
 import pandas as pd
 
+os.environ["KMP_DUPLICATE_LIB_OK"] = 'TRUE'  # 防止可能出现的libiomp5.dylib报错
 parser = argparse.ArgumentParser(description='|clip文本搜图片|')
 parser.add_argument('--database_path', default='feature_database.csv', type=str, help='|特征数据库位置|')
 parser.add_argument('--model_name', default='ViT-L/14', type=str, help='|模型名称，中文文本模型只支持ViT-L/14(890M)|')
