@@ -10,13 +10,13 @@
 >原CLIP官方文本模型只支持英文，国内有人训练了中文的文本模型，但只支持ViT-L/14型号(890M)  
 ### 项目介绍
 >本项目将建立图片特征数据库，然后用文本描述(75字以内，长的会被截断)去搜索符合描述的图片  
-### 1.环境：linux
+### 1，环境：linux
 >torch：https://pytorch.org/get-started/previous-versions/
 >```
 >pip install ftfy regex tqdm transformers -i https://pypi.tuna.tsinghua.edu.cn/simple
 >pip install git+https://github.com/openai/CLIP.git
 >```
-### *.单独下载中文文本模型(1.3G)
+### *，单独下载中文文本模型(1.3G)
 >```
 >sudo apt-get install git-lfs：安装git-lfs
 >git lfs install：启用lfs。不使用lfs无法下载大文件
