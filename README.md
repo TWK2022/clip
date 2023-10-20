@@ -16,6 +16,8 @@
 >pip install ftfy regex tqdm transformers -i https://pypi.tuna.tsinghua.edu.cn/simple
 >pip install git+https://github.com/openai/CLIP.git
 >```
+### *，单独下载clip模型(890M)
+>https://openaipublic.azureedge.net/clip/models/b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836/ViT-L-14.pt
 ### *，单独下载中文文本模型(1.3G)
 >```
 >sudo apt-get install git-lfs：安装git-lfs
