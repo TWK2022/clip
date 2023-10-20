@@ -31,5 +31,5 @@ if __name__ == '__main__':
     print('| 使用gradio启动服务 |')
     model = clip_class(args)
     gradio_app = gradio.Interface(fn=function, inputs=['text', 'text'], outputs=['text', 'image'],
-                                  examples=[['螺丝刀', 'True']])
+                                  examples=[['一只白色的狗', 'True']])
     gradio_app.launch(share=False)
