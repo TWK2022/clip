@@ -11,7 +11,7 @@
 ### 项目介绍
 >本项目将建立图片特征数据库，然后用文本描述(75字以内，长的会被截断)去搜索符合描述的图片  
 ### 1.环境：linux
->torch==1.12.0：https://pytorch.org/get-started/previous-versions/
+>torch：https://pytorch.org/get-started/previous-versions/
 >```
 >pip install ftfy regex tqdm transformers -i https://pypi.tuna.tsinghua.edu.cn/simple
 >pip install git+https://github.com/openai/CLIP.git
