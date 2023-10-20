@@ -4,12 +4,14 @@ import argparse
 import numpy as np
 import transformers
 import pandas as pd
+import os
 
+os.environ["KMP_DUPLICATE_LIB_OK"] = 'TRUE'
 parser = argparse.ArgumentParser(description='|clip文本搜图片|')
 parser.add_argument('--database_path', default='feature_database.csv', type=str, help='|特征数据库位置|')
 parser.add_argument('--model_name', default='ViT-L/14', type=str, help='|模型名称，中文文本模型只支持ViT-L/14(890M)|')
-parser.add_argument('--chinese_cache', default='/root/.cache/huggingface/hub', type=str, help='|中文文本模型缓存/下载位置|')
-parser.add_argument('--device', default='cuda', type=str, help='|运行设备|')
+parser.add_argument('--chinese_model', default='clip_chinese_model', type=str, help='|中文文本模型名称或下载位置|')
+parser.add_argument('--device', default='cpu', type=str, help='|运行设备|')
 args = parser.parse_args()
 
 
@@ -21,11 +23,10 @@ class clip_class:
         # 模型
         model, image_deal = clip.load(self.model_name, device=self.device)  # clip模型：图片模型+英文文本模型
         self.model = model.eval()
-        chinese_tokenizer = transformers.BertTokenizer.from_pretrained(
-            "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese")
+        chinese_tokenizer = transformers.BertTokenizer.from_pretrained(args.chinese_model)
         self.chinese_tokenizer = chinese_tokenizer
         chinese_encode = transformers.BertForSequenceClassification.from_pretrained(
-            "IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese").eval().half().to(self.device)  # 中文文本模型，只支持ViT-L/14(890M)
+            args.chinese_model).eval().to(self.device)  # 中文文本模型，只支持ViT-L/14(890M)
         self.chinese_encode = chinese_encode
         # 数据
         df = pd.read_csv(self.database_path)
@@ -44,7 +45,7 @@ class clip_class:
         score = [i[j] for i, j in zip(score, index_list)]
         return column, score
 
-    def predict(self, text, use_chinese=False):  # 输入单个/多个文本，返回图片名和概率值
+    def predict(self, text, use_chinese=True):  # 输入单个/多个文本，返回图片名和概率值
         with torch.no_grad():
             # 英文
             if not use_chinese:
@@ -63,11 +64,11 @@ class clip_class:
 
 if __name__ == '__main__':
     # 输入文本
-    text = ['Lipstick', 'Cat', 'Office']
-    use_chinese = False
+    text = ['螺丝刀', '齿轮', '机床', '两只黑色的猫', '一只白色的狗']
+    # text = ['Screwdriver', 'Gear', 'Machine tool', 'Two Black cat', 'One White Dog']
     # 开始预测
     model = clip_class(args)
-    column, score = model.predict(text, use_chinese)  # 输入单个/多个文本，最匹配的图片和相似度
+    column, score = model.predict(text, use_chinese=True)  # 输入单个/多个文本，最匹配的图片和相似度
     print(f'| 输入:{text} |')
     print(f'| 图片:{column} |')
-    print(f'| 相似度:{score} |')
+    print(f'| 相似度:{[round(_, 4) for _ in score]} |')
