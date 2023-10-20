@@ -64,8 +64,8 @@ class clip_class:
 
 if __name__ == '__main__':
     # 输入文本
-    text = ['螺丝刀', '齿轮', '机床', '两只黑色的猫', '一只白色的狗']
-    # text = ['Screwdriver', 'Gear', 'Machine tool', 'Two Black cat', 'One White Dog']
+    text = ['两只黑色的猫', '一只白色的狗']
+    # text = ['Two Black cat', 'One White Dog']
     # 开始预测
     model = clip_class(args)
     column, score = model.predict(text, use_chinese=True)  # 输入单个/多个文本，最匹配的图片和相似度
