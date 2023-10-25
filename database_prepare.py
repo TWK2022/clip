@@ -10,8 +10,7 @@ import pandas as pd
 parser = argparse.ArgumentParser(description='|建立图片数据库|')
 parser.add_argument('--image_path', default='image_database', type=str, help='|图片文件夹位置|')
 parser.add_argument('--save_path', default='feature_database.csv', type=str, help='|特征数据库保存位置(.csv)|')
-parser.add_argument('--model_name', default='ViT-L/14', type=str,
-                    help='|模型名称或下载的模型，中文文本模型只支持ViT-L/14(890M)|')
+parser.add_argument('--model_path', default='ViT-L/14', type=str, help='|模型名称或模型位置，中文文本模型只支持ViT-L/14(890M)|')
 parser.add_argument('--batch', default=8, type=int, help='|模型预测的图片批量|')
 parser.add_argument('--device', default='cuda', type=str, help='|运行设备|')
 parser.add_argument('--num_worker', default=0, type=int, help='|数据处理cpu线程数|')
@@ -33,8 +32,8 @@ class torch_dataset(torch.utils.data.Dataset):
 
 if __name__ == '__main__':
     # 模型
-    model, image_deal = clip.load(args.model_name, device=args.device)  # clip模型：图片模型+英文文本模型
-    print(f'| 加载模型成功:{args.model_name} |')
+    model, image_deal = clip.load(args.model_path, device=args.device)  # clip模型：图片模型+英文文本模型
+    print(f'| 加载模型成功:{args.model_path} |')
     # 图片处理
     image_name = sorted(os.listdir(args.image_path))
     dataset = torch_dataset(image_name, image_deal)
