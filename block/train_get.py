@@ -70,7 +70,6 @@ def train_get(args, data_dict, model_dict, loss):
         if args.local_rank == 0:  # 分布式时只保存一次
             if epoch % 5 == 0:
                 model.save_pretrained(f'save_epoch_{epoch}')
-
         torch.distributed.barrier() if args.distributed else None  # 分布式时每轮训练后让所有GPU进行同步，快的GPU会在此等待
 
 
