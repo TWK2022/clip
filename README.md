@@ -37,3 +37,5 @@
 >以post请求传输数据调用服务
 ### 7，gunicorn_config.py
 >用gunicorn多进程启动flask服务：gunicorn -c gunicorn_config.py flask_start:app
+### 8，run.py
+>微调模型，即使几张图片+描述也可以微调，在能达到满意效果的情况下训练次数越少越好
