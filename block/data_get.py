@@ -17,7 +17,7 @@ class data_prepare(object):
             df = pd.read_csv(self.data_path, encoding='utf-8')
         except:
             df = pd.read_csv(self.data_path, encoding='gbk')
-        input_data = df.columns
-        output_data = df.values.T.astype(np.float32)
-        data_dict = {'input_data': input_data, 'output_data': output_data}
+        train_input = df.columns
+        train_output = df.values.astype(np.float32).T
+        data_dict = {'train_input': train_input, 'train_output': train_output}
         return data_dict
