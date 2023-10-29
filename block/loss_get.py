@@ -6,7 +6,7 @@ def loss_get(args):
     return loss
 
 
-class loss_class:  # 使越靠近前面的数的准确率越重要
+class loss_class:
     def __init__(self, args):
         self.loss = torch.nn.CrossEntropyLoss()
 
