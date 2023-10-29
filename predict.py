@@ -6,6 +6,8 @@ import numpy as np
 import transformers
 import pandas as pd
 
+# -------------------------------------------------------------------------------------------------------------------- #
+# 设置
 os.environ["KMP_DUPLICATE_LIB_OK"] = 'TRUE'  # 防止可能出现的libiomp5.dylib报错
 parser = argparse.ArgumentParser(description='|clip文本搜图片|')
 parser.add_argument('--database_path', default='feature_database.csv', type=str, help='|特征数据库位置|')
@@ -16,6 +18,8 @@ parser.add_argument('--device', default='cpu', type=str, help='|运行设备|')
 args = parser.parse_args()
 
 
+# -------------------------------------------------------------------------------------------------------------------- #
+# 程序
 class clip_class:
     def __init__(self, args):
         self.device = args.device

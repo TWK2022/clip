@@ -7,6 +7,8 @@ import argparse
 import numpy as np
 import pandas as pd
 
+# -------------------------------------------------------------------------------------------------------------------- #
+# 设置
 parser = argparse.ArgumentParser(description='|建立图片数据库|')
 parser.add_argument('--image_path', default='image_database', type=str, help='|图片文件夹位置|')
 parser.add_argument('--save_path', default='feature_database.csv', type=str, help='|特征数据库保存位置(.csv)|')
@@ -17,6 +19,8 @@ parser.add_argument('--num_worker', default=0, type=int, help='|数据处理cpu�
 args = parser.parse_args()
 
 
+# -------------------------------------------------------------------------------------------------------------------- #
+# 程序
 class torch_dataset(torch.utils.data.Dataset):
     def __init__(self, image_name, image_deal):
         self.image_name = image_name
