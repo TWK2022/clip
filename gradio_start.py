@@ -1,7 +1,5 @@
 # pip install gradio -i https://pypi.tuna.tsinghua.edu.cn/simple
 # 用gradio将程序包装成一个可视化的界面，可以在网页可视化的展示
-# gradio_app=gradio.Interface(self,fn,inputs=None,outputs=None,examples=None)：配置。fn为传入inputs后执行的函数；inputs为输入的参数类型，单个参数直接传入，多个参数用列表对应传入，outputs为输出显示的类型，'text'为传入/显示字符串，'image'为传入/显示图片(RGB)
-# gradio_app.launch(share=False)：启动界面，启动后默认可在http://127.0.0.1:7860访问。share=False时只能在本地访问，True时可在外部访问，但只有24小时的免费，超过的要在gradio官方购买云服务
 import cv2
 import gradio
 import argparse
