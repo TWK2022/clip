@@ -20,7 +20,7 @@
 >https://openaipublic.azureedge.net/clip/models/b8cca3fd41ae0c99ba7e8951adf17d267cdb84cd88be6f7c2e0eca1737a03836/ViT-L-14.pt
 ### *，单独下载中文文本模型(1.3G)
 >```
->sudo apt-get install git-lfs：安装git-lfs
+>sudo apt-get install git-lfs：linux安装git-lfs。windows安装git时自带
 >git lfs install：启用lfs。不使用lfs无法下载大文件
 >git clone https://huggingface.co/IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese：下载中文文本模型
 >```
