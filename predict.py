@@ -59,10 +59,11 @@ class clip_class:
                 column, score = self._deal(english_text_feature)
             # 中文
             else:
-                chinese_sequence = self.chinese_tokenizer(text, max_length=77, padding='max_length',
-                                                          truncation=True, return_tensors='pt')['input_ids'].type(
-                    torch.int32).to(self.device)  # 处理
-                chinese_text_feature = self.chinese_model(chinese_sequence).logits  # 推理
+                chinese_data = self.chinese_tokenizer(text, max_length=77, padding='max_length', truncation=True,
+                                                      return_tensors='pt')
+                input_ids = chinese_data['input_ids'].to(self.device)
+                attention_mask = chinese_data['attention_mask'].to(self.device)
+                chinese_text_feature = self.chinese_model(input_ids=input_ids, attention_mask=attention_mask).logits
                 column, score = self._deal(chinese_text_feature)
         return column, score
 
