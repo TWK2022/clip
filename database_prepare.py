@@ -14,7 +14,7 @@ parser.add_argument('--image_path', default='image_database', type=str, help='|�
 parser.add_argument('--save_path', default='feature_database.csv', type=str, help='|特征数据库保存位置(.csv)|')
 parser.add_argument('--model_path', default='ViT-L/14', type=str, help='|模型名称或模型位置，中文文本模型只支持ViT-L/14(890M)|')
 parser.add_argument('--batch', default=8, type=int, help='|模型预测的图片批量|')
-parser.add_argument('--device', default='cuda', type=str, help='|运行设备|')
+parser.add_argument('--device', default='cuda', type=str, help='|设备|')
 parser.add_argument('--num_worker', default=0, type=int, help='|数据处理cpu线程数|')
 args = parser.parse_args()
 
@@ -55,6 +55,6 @@ if __name__ == '__main__':
         image_feature = np.concatenate(image_feature_list, axis=0).T
     # 记录图片特征
     column = image_name
-    df = pd.DataFrame(image_feature, columns=column)
+    df = pd.DataFrame(image_feature, columns=column, dtype=np.float16)
     df.to_csv(args.save_path, index=False, header=True)
     print(f'| 图片特征处理完毕:{len(image_name)}，保存在:{args.save_path} |')
