@@ -15,7 +15,7 @@ from block.train_get import train_get
 # 设置
 parser = argparse.ArgumentParser(description='|clip中文文本模型微调|')
 parser.add_argument('--data_path', default=r'data.csv', type=str, help='|数据路径|')
-parser.add_argument('--model', default='clip_chinese_model', type=str, help='|模型|')
+parser.add_argument('--model', default='chinese_model', type=str, help='|模型|')
 parser.add_argument('--epoch', default=26, type=int, help='|训练轮数|')
 parser.add_argument('--batch', default=10, type=int, help='|训练批量大小|')
 parser.add_argument('--loss', default='mse', type=str, help='|损失函数|')

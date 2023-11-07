@@ -23,6 +23,7 @@ __pycache__
 # -------------------------------------------------------------------------------------------------------------------- #
 !clip.jpg
 !feature_database.csv
+!README_IMAGE/001.jpg
 !image_database/demo0.jpg
 !image_database/demo1.jpg
 !image_database/demo2.jpg
