@@ -31,14 +31,14 @@ class torch_dataset(torch.utils.data.Dataset):
 
     def __getitem__(self, index):
         image = self.image_deal(PIL.Image.open(f'{args.image_path}/{self.image_name[index]}'))
-        image = image.type(torch.float32) if args.device.lower() == 'cpu' else image.type(torch.float16)
+        image = image.type(torch.float32)
         return image
 
 
 if __name__ == '__main__':
     # 模型
     model, image_deal = clip.load(args.model_path, device=args.device)  # clip模型：图片模型+英文文本模型
-    model = model.float().eval() if args.device.lower() == 'cpu' else model.half().eval()    
+    model = model.eval().float()
     print(f'| 加载模型成功:{args.model_path} |')
     # 图片处理
     image_name = sorted(os.listdir(args.image_path))
@@ -55,6 +55,6 @@ if __name__ == '__main__':
         image_feature = np.concatenate(image_feature_list, axis=0).T
     # 记录图片特征
     column = image_name
-    df = pd.DataFrame(image_feature, columns=column, dtype=np.float16)
+    df = pd.DataFrame(image_feature, columns=column, dtype=np.float32)
     df.to_csv(args.save_path, index=False, header=True)
     print(f'| 图片特征处理完毕:{len(image_name)}，保存在:{args.save_path} |')

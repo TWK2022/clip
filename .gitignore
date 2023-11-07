@@ -22,6 +22,7 @@ __pycache__
 *.onnx
 # -------------------------------------------------------------------------------------------------------------------- #
 !clip.jpg
+!feature_database.csv
 !image_database/demo0.jpg
 !image_database/demo1.jpg
 !image_database/demo2.jpg

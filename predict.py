@@ -12,9 +12,9 @@ os.environ["KMP_DUPLICATE_LIB_OK"] = 'TRUE'  # 防止可能出现的libiomp5.dyl
 parser = argparse.ArgumentParser(description='|clip文本搜图片|')
 parser.add_argument('--database_path', default='feature_database.csv', type=str, help='|特征数据库位置|')
 parser.add_argument('--model_path', default='ViT-L/14', type=str, help='|模型名称或模型位置，中文文本模型只支持ViT-L/14(890M)|')
-parser.add_argument('--chinese_model', default='IDEA-CCNL/Taiyi-CLIP-Roberta-large-326M-Chinese', type=str,
+parser.add_argument('--chinese_model', default='Taiyi-CLIP-Roberta-large-326M-Chinese', type=str,
                     help='|中文文本模型名称或模型位置|')
-parser.add_argument('--device', default='cpu', type=str, help='|设备|')
+parser.add_argument('--device', default='cuda', type=str, help='|设备|')
 args = parser.parse_args()
 
 
@@ -27,14 +27,14 @@ class clip_class:
         self.database_path = args.database_path
         # 模型
         clip_model, image_deal = clip.load(self.model_path, device=self.device)  # clip模型：图片模型+英文文本模型
-        self.clip_model = clip_model.eval().float() if args.device.lower() == 'cpu' else clip_model.eval().half()
+        self.clip_model = clip_model.eval().float().to(self.device)
         chinese_tokenizer = transformers.BertTokenizer.from_pretrained(args.chinese_model)
         self.chinese_tokenizer = chinese_tokenizer
         chinese_model = transformers.BertForSequenceClassification.from_pretrained(
-            args.chinese_model).eval().to(self.device)  # 中文文本模型，只支持ViT-L/14(890M)
-        self.chinese_model = chinese_model.float() if args.device.lower() == 'cpu' else chinese_model.half()
+            args.chinese_model)  # 中文文本模型，只支持ViT-L/14(890M)
+        self.chinese_model = chinese_model.eval().float().to(self.device)
         # 数据
-        df = pd.read_csv(self.database_path, dtype=np.float16)
+        df = pd.read_csv(self.database_path, dtype=np.float32)
         column = df.columns
         image_feature = df.values
         self.column = column
@@ -43,7 +43,7 @@ class clip_class:
 
     def _deal(self, text_feature):  # 输入单个/多个文本，返回大于阈值的图片名和相似度
         text_feature /= torch.norm(text_feature, dim=1, keepdim=True)  # 归一化
-        text_feature = text_feature.cpu().numpy().astype(dtype=np.float16)
+        text_feature = text_feature.cpu().numpy().astype(dtype=np.float32)
         score = np.dot(text_feature, self.image_feature)
         index_list = [np.argmax(_) for _ in score]
         column = [self.column[_] for _ in index_list]
@@ -61,8 +61,8 @@ class clip_class:
             else:
                 chinese_data = self.chinese_tokenizer(text, max_length=77, padding='max_length', truncation=True,
                                                       return_tensors='pt')
-                input_ids = chinese_data['input_ids'].type(torch.int32).to(self.device)
-                attention_mask = chinese_data['attention_mask'].type(torch.int32).to(self.device)
+                input_ids = chinese_data['input_ids'].to(self.device)
+                attention_mask = chinese_data['attention_mask'].to(self.device)
                 chinese_text_feature = self.chinese_model(input_ids=input_ids, attention_mask=attention_mask).logits
                 column, score = self._deal(chinese_text_feature)
         return column, score
@@ -74,7 +74,7 @@ if __name__ == '__main__':
     # text = ['Two Black cat', 'One White Dog']
     # 开始预测
     model = clip_class(args)
-    column, score = model.predict(text, use_chinese=True)
+    column, score = model.predict(text, use_chinese=False)
     print(f'| 输入:{text} |')
     print(f'| 图片:{column} |')
     print(f'| 相似度:{[round(_, 3) for _ in score]} |')
