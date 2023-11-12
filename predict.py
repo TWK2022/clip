@@ -11,7 +11,7 @@ parser = argparse.ArgumentParser(description='|clip文本搜图片|')
 parser.add_argument('--database_path', default='feature_database.csv', type=str, help='|特征数据库位置|')
 parser.add_argument('--model_path', default='ViT-L/14', type=str, help='|模型名称或模型位置，中文文本模型只支持ViT-L/14(890M)|')
 parser.add_argument('--chinese_model', default='chinese_model', type=str, help='|中文文本模型名称或模型位置|')
-parser.add_argument('--device', default='cuda', type=str, help='|设备|')
+parser.add_argument('--device', default='cpu', type=str, help='|设备|')
 args, _ = parser.parse_known_args()  # 防止传入参数冲突，替代args = parser.parse_args()
 
 
