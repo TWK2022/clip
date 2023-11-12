@@ -56,8 +56,7 @@ class clip_class:
                 column, score = self._deal(english_text_feature)
             # 中文
             else:
-                chinese_data = self.chinese_tokenizer(text, max_length=77, padding='max_length', truncation=True,
-                                                      return_tensors='pt')
+                chinese_data = self.chinese_tokenizer(text, max_length=77, truncation=True, return_tensors='pt')
                 input_ids = chinese_data['input_ids'].to(self.device)
                 attention_mask = chinese_data['attention_mask'].to(self.device)
                 chinese_text_feature = self.chinese_model(input_ids=input_ids, attention_mask=attention_mask).logits
@@ -71,7 +70,7 @@ if __name__ == '__main__':
     # text = ['Two Black cat', 'One White Dog']
     # 开始预测
     model = clip_class(args)
-    column, score = model.predict(text, use_chinese=False)
+    column, score = model.predict(text, use_chinese=True)
     print(f'| 输入:{text} |')
     print(f'| 图片:{column} |')
     print(f'| 相似度:{[round(_, 3) for _ in score]} |')
