@@ -85,7 +85,7 @@ class torch_dataset(torch.utils.data.Dataset):
     def __getitem__(self, index):
         input_dict = self.tokenizer(self.input_data[index], max_length=77, padding='max_length', truncation=True,
                                     return_tensors='pt')
-        input_ids = input_dict['input_ids'].type(torch.int32).squeeze(0)
-        attention_mask = input_dict['attention_mask'].type(torch.int32).squeeze(0)
+        input_ids = input_dict['input_ids'].squeeze(0)
+        attention_mask = input_dict['attention_mask'].squeeze(0)
         label = torch.tensor(self.output_data[index], dtype=torch.float32)  # 转换为tensor
         return input_ids, attention_mask, label
