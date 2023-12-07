@@ -1,8 +1,8 @@
 import tqdm
 import torch
 import transformers
-from block.ModelEMA import ModelEMA
 from block.lr_get import adam
+from block.ModelEMA import ModelEMA
 
 
 def train_get(args, data_dict, model_dict, loss):
