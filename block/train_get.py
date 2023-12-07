@@ -1,8 +1,8 @@
 import tqdm
 import torch
 import transformers
-from block.ModelEMA import ModelEMA
 from block.lr_get import adam
+from block.ModelEMA import ModelEMA
 
 
 def train_get(args, data_dict, model_dict, loss):
@@ -40,16 +40,16 @@ def train_get(args, data_dict, model_dict, loss):
                 with torch.cuda.amp.autocast():
                     pred_batch = model(input_ids, attention_mask).logits
                     loss_batch = loss(pred_batch, true_batch)
-                optimizer.zero_grad()
                 args.amp.scale(loss_batch).backward()
                 args.amp.step(optimizer)
                 args.amp.update()
+                optimizer.zero_grad()
             else:
                 pred_batch = model(input_ids, attention_mask).logits
                 loss_batch = loss(pred_batch, true_batch)
-                optimizer.zero_grad()
                 loss_batch.backward()
                 optimizer.step()
+                optimizer.zero_grad()
             # 调整参数，ema.updates会自动+1
             ema.update(model) if args.ema else None
             # 记录损失
@@ -85,7 +85,7 @@ class torch_dataset(torch.utils.data.Dataset):
     def __getitem__(self, index):
         input_dict = self.tokenizer(self.input_data[index], max_length=77, padding='max_length', truncation=True,
                                     return_tensors='pt')
-        input_ids = input_dict['input_ids'].squeeze(0)
-        attention_mask = input_dict['attention_mask'].squeeze(0)
+        input_ids = input_dict['input_ids'].type(torch.int32).squeeze(0)
+        attention_mask = input_dict['attention_mask'].type(torch.int32).squeeze(0)
         label = torch.tensor(self.output_data[index], dtype=torch.float32)  # 转换为tensor
         return input_ids, attention_mask, label
