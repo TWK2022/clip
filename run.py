@@ -5,7 +5,7 @@ from block.model_get import model_get
 from block.loss_get import loss_get
 from block.train_get import train_get
 # -------------------------------------------------------------------------------------------------------------------- #
-# 数据data.csv格式：values768长度的特征向量，column为特征向量对应的中文文本
+# 数据data.csv格式：values为768长度的特征向量，column为特征向量对应的中文文本
 # -------------------------------------------------------------------------------------------------------------------- #
 # 分布式训练:
 # python -m torch.distributed.launch --master_port 9999 --nproc_per_node n run.py --distributed True
@@ -16,13 +16,16 @@ from block.train_get import train_get
 parser = argparse.ArgumentParser(description='|clip中文文本模型微调|')
 parser.add_argument('--data_path', default=r'data.csv', type=str, help='|数据路径|')
 parser.add_argument('--model', default='chinese_model', type=str, help='|模型|')
-parser.add_argument('--epoch', default=26, type=int, help='|训练轮数|')
+parser.add_argument('--epoch', default=15, type=int, help='|训练轮数|')
 parser.add_argument('--batch', default=10, type=int, help='|训练批量大小|')
 parser.add_argument('--loss', default='mse', type=str, help='|损失函数|')
-parser.add_argument('--lr_start', default=0.00005, type=float, help='|初始学习率|')
+parser.add_argument('--lr_start', default=0.00005, type=float, help='|初始学习率，adam算法，3轮预热训练，基准为0.00005|')
+parser.add_argument('--lr_end_ratio', default=0.1, type=float, help='|最终学习率=lr_end_ratio*lr_start，基准为0.1|')
+parser.add_argument('--lr_adjust_num', default=10, type=int, help='|学习率下降调整次数，余玄下降法，要小于总轮次|')
+parser.add_argument('--lr_adjust_threshold', default=0.9, type=float, help='|损失下降比较快时不调整学习率，基准为0.9|')
 parser.add_argument('--regularization', default='L2', type=str, help='|正则化，有L2、None|')
 parser.add_argument('--r_value', default=0.0005, type=float, help='|正则化的权重系数|')
-parser.add_argument('--device', default='cpu', type=str, help='|训练设备|')
+parser.add_argument('--device', default='cuda', type=str, help='|训练设备|')
 parser.add_argument('--latch', default=True, type=bool, help='|模型和数据是否为锁存，True为锁存|')
 parser.add_argument('--num_worker', default=0, type=int, help='|CPU在处理数据时使用的进程数，0表示只有一个主进程，一般为0、2、4、8|')
 parser.add_argument('--ema', default=True, type=bool, help='|使用平均指数移动(EMA)调整参数|')
