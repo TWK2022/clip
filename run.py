@@ -19,7 +19,7 @@ parser.add_argument('--model', default='chinese_model', type=str, help='|模型|
 parser.add_argument('--epoch', default=26, type=int, help='|训练轮数|')
 parser.add_argument('--batch', default=10, type=int, help='|训练批量大小|')
 parser.add_argument('--loss', default='mse', type=str, help='|损失函数|')
-parser.add_argument('--lr_start', default=0.000002, type=float, help='|初始学习率|')
+parser.add_argument('--lr_start', default=0.00005, type=float, help='|初始学习率|')
 parser.add_argument('--regularization', default='L2', type=str, help='|正则化，有L2、None|')
 parser.add_argument('--r_value', default=0.0005, type=float, help='|正则化的权重系数|')
 parser.add_argument('--device', default='cpu', type=str, help='|训练设备|')
