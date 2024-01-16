@@ -1,8 +1,8 @@
 import tqdm
 import torch
 import transformers
-from block.lr_get import adam
 from block.ModelEMA import ModelEMA
+from block.lr_get import adam, lr_adjust
 
 
 def train_get(args, data_dict, model_dict, loss):
@@ -10,6 +10,9 @@ def train_get(args, data_dict, model_dict, loss):
     model = model_dict['model'].to(args.device, non_blocking=args.latch)
     # 学习率
     optimizer = adam(args.regularization, args.r_value, model.parameters(), lr=args.lr_start, betas=(0.937, 0.999))
+    optimizer.load_state_dict(model_dict['optimizer_state_dict']) if model_dict['optimizer_state_dict'] else None
+    optimizer_adjust = lr_adjust(args, model_dict['lr_adjust_index'])  # 学习率调整函数
+    optimizer = optimizer_adjust(optimizer, model_dict['epoch'] + 1, 0)  # 初始化学习率
     # 使用平均指数移动(EMA)调整参数(不能将ema放到args中，否则会导致模型保存出错)
     ema = ModelEMA(model) if args.ema else None
     if args.ema:
@@ -24,14 +27,14 @@ def train_get(args, data_dict, model_dict, loss):
     # 分布式初始化
     model = torch.nn.parallel.DistributedDataParallel(model, device_ids=[args.local_rank],
                                                       output_device=args.local_rank) if args.distributed else model
-    for epoch in range(args.epoch):
-        # 训练
+    epoch_base = model_dict['epoch'] + 1  # 新的一轮要+1
+    for epoch in range(epoch_base, epoch_base + args.epoch):  # 训练
         print(f'\n-----------------------第{epoch}轮-----------------------') if args.local_rank == 0 else None
         model.train()
         train_loss = 0  # 记录训练损失
-        tqdm_show = tqdm.tqdm(
-            total=len(data_dict['train_input']) // args.batch // args.device_number * args.device_number, postfix=dict,
-            mininterval=0.2) if args.local_rank == 0 else None  # tqdm
+        if args.local_rank == 0:  # tqdm
+            tqdm_len = len(data_dict['train_input']) // args.batch // args.device_number * args.device_number
+            tqdm_show = tqdm.tqdm(total=tqdm_len, mininterval=0.2)
         for index, (input_ids, attention_mask, true_batch) in enumerate(train_dataloader):
             input_ids = input_ids.to(args.device, non_blocking=args.latch)
             attention_mask = attention_mask.to(args.device, non_blocking=args.latch)
@@ -59,10 +62,14 @@ def train_get(args, data_dict, model_dict, loss):
                 tqdm_show.set_postfix({'当前loss': loss_batch.item()})  # 添加loss显示
                 tqdm_show.update(args.device_number)  # 更新进度条
         # tqdm
-        tqdm_show.close() if args.local_rank == 0 else None
+        if args.local_rank == 0:
+            tqdm_show.close()
         # 计算平均损失
-        train_loss = train_loss / (index + 1)
-        print('\n| train_loss:{:.4f} | lr:{:.6f} |\n'.format(train_loss, optimizer.param_groups[0]['lr']))
+        train_loss /= index + 1
+        if args.local_rank == 0:
+            print('\n| train_loss:{:.4f} | lr:{:.6f} |\n'.format(train_loss, optimizer.param_groups[0]['lr']))
+        # 调整学习率
+        optimizer = optimizer_adjust(optimizer, epoch + 1, train_loss)
         # 清理显存空间
         del input_ids, attention_mask, true_batch, pred_batch, loss_batch
         torch.cuda.empty_cache()
