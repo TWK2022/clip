@@ -59,7 +59,7 @@ def train_get(args, data_dict, model_dict, loss):
             train_loss += loss_batch.item()
             # tqdm
             if args.local_rank == 0:
-                tqdm_show.set_postfix({'当前loss': loss_batch.item()})  # 添加loss显示
+                tqdm_show.set_postfix({'train_loss': loss_batch.item()})  # 添加loss显示
                 tqdm_show.update(args.device_number)  # 更新进度条
         # tqdm
         if args.local_rank == 0:
@@ -67,7 +67,7 @@ def train_get(args, data_dict, model_dict, loss):
         # 计算平均损失
         train_loss /= index + 1
         if args.local_rank == 0:
-            print('\n| train_loss:{:.4f} | lr:{:.6f} |\n'.format(train_loss, optimizer.param_groups[0]['lr']))
+            print(f'\n| train_loss:{train_loss:.4f} | lr:{optimizer.param_groups[0]["lr"]:.6f} |\n')
         # 调整学习率
         optimizer = optimizer_adjust(optimizer, epoch + 1, train_loss)
         # 清理显存空间
