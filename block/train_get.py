@@ -1,7 +1,7 @@
 import tqdm
 import torch
 import transformers
-from block.ModelEMA import ModelEMA
+from block.model_ema import model_ema
 from block.lr_get import adam, lr_adjust
 
 
